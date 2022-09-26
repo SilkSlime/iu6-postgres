@@ -1,0 +1,20 @@
+version: '3'
+services:
+  postgres:
+    build: ./database
+    restart: always
+    environment:
+      TZ: "Europe/Moscow"
+      POSTGRES_DB: "iu6"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "iu6-magisters"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - ./database/scripts:/docker-entrypoint-initdb.d
+      - ./database/data:/var/lib/postgresql/data
+      - ./files:/files
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
